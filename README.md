@@ -11,4 +11,4 @@ Homework, exam practice tasks and exam
 1. Behavioral Design Patterns
 1. Intro to Dependency Inversion, Dependency Injection and IoC Containers
 1. DI and IoC Containers
-1. Workshop
+1. [Workshop](Workshop)
