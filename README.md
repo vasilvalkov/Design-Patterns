@@ -1,4 +1,4 @@
-# Design-Patterns
+# [Design-Patterns](https://github.com/TelerikAcademy/Design-Patterns)
 Homework, exam practice tasks and exam
 
 
