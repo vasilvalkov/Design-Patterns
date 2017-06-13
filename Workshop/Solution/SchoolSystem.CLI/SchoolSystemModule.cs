@@ -1,8 +1,10 @@
 ﻿using Ninject;
+using Ninject.Extensions.Interception.Infrastructure.Language;
 using Ninject.Modules;
 using SchoolSystem.Cli.Configuration;
 using SchoolSystem.CLI;
 using SchoolSystem.Framework.Core;
+using SchoolSystem.Framework.Core.Commands;
 using SchoolSystem.Framework.Core.Contracts;
 using SchoolSystem.Framework.Core.Factories;
 using SchoolSystem.Framework.Core.Factories.Contracts;
@@ -18,9 +20,12 @@ namespace SchoolSystem.Cli
             this.Bind<IWriter>().To<ConsoleWriterProvider>();
             this.Bind<IParser>().To<CommandParserProvider>();
 
-            this.Bind<ISchoolFactory>().To<SchoolFactory>().InSingletonScope();
-            this.Bind<ICommandFactory>().To<CommandFactory>().InSingletonScope();
-            this.Bind<ISchoolDatabase>().To<SchoolDatabase>().InSingletonScope();            
+            var schoolFactoryBinding = this.Bind<ISchoolFactory>().To<SchoolFactory>().InSingletonScope();
+            var commandFactoryBinding = this.Bind<ICommandFactory>().To<CommandFactory>().InSingletonScope();
+            this.Bind<ISchoolDatabase>().To<SchoolDatabase>().InSingletonScope();
+
+            this.Bind<CreateStudentCommand>().ToSelf().InSingletonScope();        
+            this.Bind<CreateTeacherCommand>().ToSelf().InSingletonScope();
 
             this.Bind<IEngine>().To<Engine>().InSingletonScope();
             this.Bind<IServiceLocator>().To<ServiceLocator>();
@@ -30,6 +35,8 @@ namespace SchoolSystem.Cli
             IConfigurationProvider configurationProvider = Kernel.Get<IConfigurationProvider>();
             if (configurationProvider.IsTestEnvironment)
             {
+                commandFactoryBinding.Intercept().With<StopwatchInterceptor>();
+                schoolFactoryBinding.Intercept().With<StopwatchInterceptor>();
             }
         }
     }

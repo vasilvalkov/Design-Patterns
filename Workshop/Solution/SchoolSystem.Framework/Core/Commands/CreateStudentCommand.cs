@@ -8,9 +8,9 @@ namespace SchoolSystem.Framework.Core.Commands
 {
     public class CreateStudentCommand : ICommand
     {
-        private static int currentStudentId = 0;
         private readonly ISchoolFactory schoolFactory;
         private readonly ISchoolDatabase schoolDatabase;
+        private int currentStudentId = 0;
 
         public CreateStudentCommand(ISchoolFactory schoolFactory, ISchoolDatabase schoolDadtabase)
         {
@@ -25,9 +25,9 @@ namespace SchoolSystem.Framework.Core.Commands
             var grade = (Grade)int.Parse(parameters[2]);
 
             var student = this.schoolFactory.CreateStudent(firstName, lastName, grade);
-            this.schoolDatabase.Students.Add(currentStudentId, student);
+            this.schoolDatabase.Students.Add(this.currentStudentId, student);
 
-            return $"A new student with name {firstName} {lastName}, grade {grade} and ID {currentStudentId++} was created.";
+            return $"A new student with name {firstName} {lastName}, grade {grade} and ID {this.currentStudentId++} was created.";
         }
     }
 }
